@@ -139,9 +139,9 @@ gsap.to(ref.current.position, { x: 0, y: 0, z: 5, duration: 1 });
 
 ### 4. Performance & Optimization (The Hot Path)
 
-The `useFrame` loop is holy ground. It runs every ~16ms (60fps) or ~8ms (120fps). You strictly enforce ESLint rules to protect the Garbage Collector.
+The `useFrame` loop is holy ground. It runs every ~16ms (60fps) or ~8ms (120fps). Instantiating objects like `new Vector3()` or using `.clone()` inside `useFrame` will result in a compilation (linter) error, not just a performance recommendation. You strictly enforce these ESLint rules to protect the Garbage Collector.
 
-#### **Rule 1: ZERO Allocations (`no-clone-in-frame-loop`)**
+#### **Rule 1: ZERO Allocations (`@react-three/no-clone-in-loop`)**
 **BAD (Fired)**:
 ```typescript
 useFrame(() => {
@@ -159,7 +159,7 @@ useFrame(() => {
 });
 ```
 
-#### **Rule 2: NO React State in Loop (`no-fast-state`)**
+#### **Rule 2: NO React State in Loop (`@react-three/no-new-in-loop`)**
 **BAD**:
 ```typescript
 const [x, setX] = useState(0);

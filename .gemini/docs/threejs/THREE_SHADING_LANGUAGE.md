@@ -1,3 +1,5 @@
+> O código gerado para TSL deve respeitar o rigor de tipagem do @guardians/engine-core, evitando o uso de any em inputs e outputs de funções de shader.
+
 ## TSL Specification
 
 An Approach to Productive and Maintainable Shader Creation.

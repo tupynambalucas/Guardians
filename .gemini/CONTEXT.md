@@ -28,13 +28,13 @@ The project is divided into NPM workspaces for strict separation of concerns:
 ## 🛠️ Preferred Tech Stack
 
 - **Frontend:** React 19, Vite.
-- **3D Engine:** Three.js (WebGPURenderer), React Three Fiber v9.
+- **3D Engine:** Three.js v0.182 (WebGPURenderer), React Three Fiber v9.
 - **Shaders:** **TSL (Three Shading Language)**. *Legacy GLSL strings and `onBeforeCompile` are strictly PROHIBITED.*
 - **State Management:**
   - **Complex Flows:** XState (in `engine-core`).
   - **UI/Transient:** Zustand (in `engine-react`).
 - **Styling:** TailwindCSS v4.
-- **Linting:** ESLint v9 Flat Config (Strict Type-Checked).
+- **Linting:** ESLint v9 Flat Config (Strict Type-Checked), @react-three/eslint-plugin.
 
 ## 📝 Conventions (Reinforced in STYLEGUIDE.md & ESLint)
 
@@ -43,7 +43,7 @@ The project is divided into NPM workspaces for strict separation of concerns:
   - **Async Init:** Canvas `gl` prop must use async `renderer.init()`.
   - **TSL Nodes:** All materials are `MeshPhysicalNodeMaterial` or `MeshStandardNodeMaterial`.
 - **Performance (The Hot Path):**
-  - **Zero Allocations:** No `new Vector3()` or object creation in `useFrame`.
+  - **Zero Allocations:** No `new Vector3()` or object creation in `useFrame`. As the project uses WebGPU, zero memory allocation in the loop is a strict system requirement.
   - **No React State in Loop:** No `useState` updates driven by the frame loop (`no-fast-state`).
 - **Materials:** Logic resides in `.material.ts` files, not inline in components.
 - **Path Aliases:**

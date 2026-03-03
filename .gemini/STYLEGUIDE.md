@@ -11,7 +11,7 @@ Type safety is paramount for the stability of our WebGPU pipeline.
 - **Explicit Return Types**:
   - **Mandatory** in `@guardians/engine-core` to ensure stable API contracts.
   - **Recommended** in `@guardians/engine-react` for complex hooks and components.
-- **Type Imports**: Use `import type` for all type declarations.
+- **Type Imports**: Sempre utilize `import type` para definições de tipos e interfaces, nunca misture com imports de valores.
   ```typescript
   import type { IState } from './types'; // ✅
   ```
@@ -20,32 +20,37 @@ Type safety is paramount for the stability of our WebGPU pipeline.
 
 1.  **S - Single Responsibility**:
     - `card.model.tsx`: Holds the card's geometry (GLB).
-    - `card.materials.ts`: Holds the TSL material definitions.
-    - `card.animations.ts`: Holds the animation logic.
+    - `card.material.ts`: Holds the TSL material definitions.
+    - `card.animation.ts`: Holds the animation logic.
 2.  **O - Open/Closed**: Extend functionality via composition (React `children` or custom hooks), not by modifying core components with excessive flags.
 3.  **D - Dependency Inversion**: `engine-react` depends on abstract state interfaces from `engine-core`, not concrete implementations.
 
 ## ⚛️ React & React Three Fiber (v9) Rules
 
 ### 1. The Render Loop (Hot Path)
+
 **CRITICAL**: The `useFrame` loop runs 60-120 times per second.
+
 - **NO Allocations**: Never create objects (`new THREE.Vector3()`, `new THREE.Matrix4()`) inside `useFrame`. Re-use module-level constants or `useMemo` variables.
-  - *ESLint Rule*: `react-three/no-clone-in-frame-loop`
+  - _ESLint Rule_: `@react-three/no-clone-in-loop`
 - **NO State Updates**: Never call `setState` or dispatch actions inside `useFrame` unless absolutely necessary (and throttled). Use `useRef` for visual updates.
-  - *ESLint Rule*: `react-three/no-fast-state`
+  - _ESLint Rule_: `@react-three/no-new-in-loop`
 
 ### 2. Component Structure
+
 - **Functional Components Only**.
 - **Async Initialization**: The `<Canvas>` `gl` prop must use async initialization for WebGPURenderer.
+
   ```tsx
   import { WebGPURenderer } from 'three';
-  
+
   <Canvas gl={async (props) => {
     const renderer = new WebGPURenderer(props);
     await renderer.init();
     return renderer;
   }}>
   ```
+
 - **Type Safety (v9)**:
   - Do not use `GroupProps`, `MeshProps` (removed in v9).
   - Use `ThreeElements['group']` or `ThreeElements['mesh']`.
@@ -89,6 +94,7 @@ We do not use GLSL strings. We use TSL Nodes.
 ## 🔍 ESLint Highlights
 
 Refer to `eslint.config.ts` for the definitive list.
+
 - `@typescript-eslint/await-thenable`: Security against unhandled async operations.
 - `react-hooks/exhaustive-deps`: Mandatory.
 - `react/no-unknown-property`: Configured to allow R3F props (`rotation-x`, `attach`, etc.).

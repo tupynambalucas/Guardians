@@ -2,12 +2,16 @@ import path from 'node:path';
 import { fileURLToPath } from 'node:url';
 
 import eslint from '@eslint/js';
+import type { Linter } from 'eslint';
 import { defineConfig } from 'eslint/config'; //
 import importPlugin from 'eslint-plugin-import';
 import reactPlugin from 'eslint-plugin-react';
 import reactHooksPlugin from 'eslint-plugin-react-hooks';
 import reactRefreshPlugin from 'eslint-plugin-react-refresh';
+import reactThreePlugin from '@react-three/eslint-plugin';
 import tseslint from 'typescript-eslint';
+
+type EslintPlugin = NonNullable<Linter.Config['plugins']>[string];
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
@@ -204,9 +208,12 @@ export default defineConfig([
     },
     plugins: {
       react: reactPlugin,
-      // O cast 'as any' continua necessário devido aos tipos do plugin
-      'react-hooks': reactHooksPlugin as any,
+
+      'react-hooks': reactHooksPlugin as unknown as EslintPlugin,
+
       'react-refresh': reactRefreshPlugin,
+
+      '@react-three': reactThreePlugin as unknown as EslintPlugin,
     },
     settings: {
       react: {
@@ -275,6 +282,8 @@ export default defineConfig([
           ],
         },
       ],
+      '@react-three/no-clone-in-loop': 'error',
+      '@react-three/no-new-in-loop': 'error',
       '@typescript-eslint/no-empty-function': 'off',
       '@typescript-eslint/ban-ts-comment': 'error',
       '@typescript-eslint/no-explicit-any': 'error',
