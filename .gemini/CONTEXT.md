@@ -39,6 +39,8 @@ The project is divided into NPM workspaces for strict separation of concerns:
 ## 📝 Conventions (Reinforced in STYLEGUIDE.md & ESLint)
 
 -   **Language:** All Markdown files and code comments MUST be in English.
+-   **I18n (Internationalization):** Hardcoded UI strings are strictly prohibited. All user-facing text in `engine-react` must use the `useTranslation` hook from `react-i18next`, which points to the dictionaries defined in `engine-core/locales`.
+-   **Monorepo Imports:** Always use workspace aliases (e.g., `@guardians/engine-core`) for communication between packages. The ESLint configuration (`eslint-import-resolver-typescript`) is set up to resolve these paths automatically, so relative paths like `../../engine-core/src` are not allowed.
 -   **Strict Typing:** No `any`. Explicit return types in Core. Strict Null Checks.
 -   **WebGPU Architecture:**
     -   **Async Init:** Canvas `gl` prop must use async `renderer.init()`.

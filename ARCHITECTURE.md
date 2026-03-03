@@ -60,6 +60,14 @@ graph TD
     - The 3D Scene detects the change.
     - The corresponding `CardActor` triggers a GSAP animation to bring it to the front and reveal its details.
 
+## ✨ Shading Pipeline
+
+To ensure maximum performance and fidelity, the project strictly separates geometry from materials.
+
+1.  **Modeling (Blender):** 3D models (`.glb`) define the shape and structure of the cards. Meshes are given placeholder names (e.g., `Card_Body`, `Gem_Inlay`). The materials assigned in Blender are ignored at runtime.
+2.  **Material Intelligence (TSL):** The visual appearance—such as holographic foils, metallic inks, and gem refractions—is defined exclusively in `.material.ts` files within `engine-react`. These files contain `MeshPhysicalNodeMaterial` instances built with TSL nodes.
+3.  **Runtime Hydration:** When a card model is loaded, the application traverses the GLB's scene graph, finds meshes by their placeholder names, and assigns the appropriate TSL material instance. This approach keeps the visual logic entirely within the performant TSL pipeline, independent of the source 3D asset.
+
 ## 🛠️ Build & Tooling
 
 - **Workspace Manager:** NPM Workspaces.
