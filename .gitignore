@@ -11,7 +11,7 @@ node_modules/
 dist/
 build/
 # --- Arquivos (Frontend) ---
-
+engine-artwork/
 # --- Ambiente e Segredos (CRÍTICO) ---
 # Ignora todos os arquivos de env
 .env
