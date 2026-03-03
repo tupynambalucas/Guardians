@@ -1,0 +1,94 @@
+# 🎨 Style Guide & Coding Standards
+
+This guide defines the coding standards for the **Guardians of Humanity** project. It is strictly enforced by our `eslint.config.ts` (ESLint v9 Flat Config).
+
+## 🛡️ TypeScript & Typing (Rigorous)
+
+Type safety is paramount for the stability of our WebGPU pipeline.
+
+- **ZERO `any`**: The use of `any` is strictly prohibited (`@typescript-eslint/no-explicit-any`).
+- **Strict Null Checks**: Always handle `null` and `undefined` explicitly. TSL nodes often require strict types.
+- **Explicit Return Types**:
+  - **Mandatory** in `@guardians/engine-core` to ensure stable API contracts.
+  - **Recommended** in `@guardians/engine-react` for complex hooks and components.
+- **Type Imports**: Use `import type` for all type declarations.
+  ```typescript
+  import type { IState } from './types'; // ✅
+  ```
+
+## 🏗️ SOLID Principles & Architecture
+
+1.  **S - Single Responsibility**:
+    - `card.model.tsx`: Holds the card's geometry (GLB).
+    - `card.materials.ts`: Holds the TSL material definitions.
+    - `card.animations.ts`: Holds the animation logic.
+2.  **O - Open/Closed**: Extend functionality via composition (React `children` or custom hooks), not by modifying core components with excessive flags.
+3.  **D - Dependency Inversion**: `engine-react` depends on abstract state interfaces from `engine-core`, not concrete implementations.
+
+## ⚛️ React & React Three Fiber (v9) Rules
+
+### 1. The Render Loop (Hot Path)
+**CRITICAL**: The `useFrame` loop runs 60-120 times per second.
+- **NO Allocations**: Never create objects (`new THREE.Vector3()`, `new THREE.Matrix4()`) inside `useFrame`. Re-use module-level constants or `useMemo` variables.
+  - *ESLint Rule*: `react-three/no-clone-in-frame-loop`
+- **NO State Updates**: Never call `setState` or dispatch actions inside `useFrame` unless absolutely necessary (and throttled). Use `useRef` for visual updates.
+  - *ESLint Rule*: `react-three/no-fast-state`
+
+### 2. Component Structure
+- **Functional Components Only**.
+- **Async Initialization**: The `<Canvas>` `gl` prop must use async initialization for WebGPURenderer.
+  ```tsx
+  import { WebGPURenderer } from 'three';
+  
+  <Canvas gl={async (props) => {
+    const renderer = new WebGPURenderer(props);
+    await renderer.init();
+    return renderer;
+  }}>
+  ```
+- **Type Safety (v9)**:
+  - Do not use `GroupProps`, `MeshProps` (removed in v9).
+  - Use `ThreeElements['group']` or `ThreeElements['mesh']`.
+  ```tsx
+  import { ThreeElements } from '@react-three/fiber';
+  function MyComponent(props: ThreeElements['group']) { ... }
+  ```
+- **Feature-Sliced**:
+  - `features/canvas`: 3D Scene components.
+  - `features/ui`: HTML overlays.
+
+## 🌈 Three Shading Language (TSL)
+
+We do not use GLSL strings. We use TSL Nodes.
+
+- **Prohibited**: `onBeforeCompile`, raw GLSL strings, `ShaderMaterial` (unless wrapping TSL).
+- **Mandatory**: `MeshStandardNodeMaterial`, `MeshPhysicalNodeMaterial`, `SpriteNodeMaterial`.
+- **Functional Syntax**: Use TSL methods over primitive values.
+  - `mix(a, b, 0.5)` ✅
+  - `uniform("float", 0.5)` ❌ -> `float(0.5)` ✅
+  - `texture(map).rgb` ✅
+- **Texture Handling**: Explicitly define color space for color textures: `texture.colorSpace = THREE.SRGBColorSpace`.
+- **Math**: Prefer `mx_noise_vec3`, `fract`, `smoothstep` nodes over heavy texture lookups where possible.
+
+## 🧠 Core Logic (Engine-Core)
+
+- **Pure TypeScript**: No React, No DOM, No Three.js (except math classes if strictly isolated).
+- **Immutability**: State updates should be immutable (handled by XState context).
+- **Testing**: Logic must be testable without a browser environment.
+
+## 🧹 Code Quality
+
+- **No Console Logs**: `console.log` is banned in production.
+- **Floating Promises**: All promises must be handled (`await` or `.catch`).
+- **Naming Conventions**:
+  - Files: `kebab-case.ts`
+  - Components: `PascalCase.tsx`
+  - Hooks: `useCamelCase.ts`
+  - Constants: `UPPER_SNAKE_CASE`
+
+## 🔍 ESLint Highlights
+
+Refer to `eslint.config.ts` for the definitive list.
+- `@typescript-eslint/await-thenable`: Security against unhandled async operations.
+- `react-hooks/exhaustive-deps`: Mandatory.
+- `react/no-unknown-property`: Configured to allow R3F props (`rotation-x`, `attach`, etc.).

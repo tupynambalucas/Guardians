@@ -1,0 +1,14 @@
+{
+  "files": [],
+  "references": [
+    { "path": "./tsconfig.node.json" },
+    { "path": "./packages/engine-core" },
+    { "path": "./packages/engine-react" }
+  ],
+  "compilerOptions": {
+    "baseUrl": ".",
+    "paths": {
+      "guardians/engine-core": ["./packages/engine-core/src/index.ts"]
+    }
+  }
+}

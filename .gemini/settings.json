@@ -1,0 +1,22 @@
+{
+  "context": {
+    "fileName": [
+      "CONTEXT.md",
+      "README.md",
+      "three-expert.md",
+      "STYLEGUIDE.md",
+      "ARCHITECTURE.md",
+      "PRODUCT.md",
+      "LICENSE.md"
+    ],
+    "discoveryMaxDirs": 200,
+    "loadMemoryFromIncludeDirectories": true,
+    "fileFiltering": {
+      "respectGitIgnore": false,
+      "respectGeminiIgnore": true,
+      "enableRecursiveFileSearch": true,
+      "disableFuzzySearch": false,
+      "enableFuzzySearch": true
+    }
+  }
+}

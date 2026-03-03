@@ -1,0 +1,24 @@
+# ---------------------------------------------------------------- #
+#  GLOBAL MONOREPO GITIGNORE
+# ---------------------------------------------------------------- #
+
+# --- Dependências & Gerenciadores de Pacote ---
+node_modules/
+# Nota: Em ambientes profissionais, o package-lock.json DEVE ser comitado
+# para garantir builds reprodutíveis. Removi a linha que o ignorava.
+
+# --- Builds e Compilação (Frontend, Backend & Shared) ---
+dist/
+build/
+# --- Arquivos (Frontend) ---
+
+# --- Ambiente e Segredos (CRÍTICO) ---
+# Ignora todos os arquivos de env
+.env
+.env.*
+
+# --- Sistema Operacional ---
+.DS_Store
+Thumbs.db
+ehthumbs.db
+gha-creds-*.json
