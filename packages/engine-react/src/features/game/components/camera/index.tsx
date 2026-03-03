@@ -18,10 +18,10 @@ const GameCamera = () => {
     <PerspectiveCamera
       ref={cameraRef}
       makeDefault
-      fov={50}
+      fov={30}
       // 2. Se você quer que ela olhe "para baixo", ela precisa estar elevada no eixo Y.
       // Modifiquei a posição de [0, 0, 10] para [0, 5, 10] como exemplo.
-      position={[0, 20, 2.5]}
+      position={[0, 30, 2.5]}
       near={0.1}
       far={1000}
       // 3. Isso garante que a lente da câmera aponte exatamente para a origem da cena
