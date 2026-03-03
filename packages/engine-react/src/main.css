@@ -1,67 +1,69 @@
-@import "tailwindcss";
+@import 'tailwindcss';
 
 @custom-variant dark (&:where(.dark, .dark *));
 
 @theme {
   /* --- Font Configuration --- */
-  --font-sans: "Nunito", sans-serif;
+  --font-sans: 'Nunito', sans-serif;
 
   /* --- Main Identity (Brand Triad) --- */
-  --color-identity-primary: #8EA637;   /* Olive Leaf: Main brand identity, headers, and primary buttons */
-  --color-identity-secondary: #C9F2AC; /* Sprout Green: Support, highlights, and renewal indicators */
-  --color-identity-tertiary: #022601;  /* Deep Forest: High contrast elements and solid base structures */
+  --color-identity-primary: #8ea637; /* Olive Leaf: Main brand identity, headers, and primary buttons */
+  --color-identity-secondary: #c9f2ac; /* Sprout Green: Support, highlights, and renewal indicators */
+  --color-identity-tertiary: #022601; /* Deep Forest: High contrast elements and solid base structures */
 
   /* --- Background System (Surfaces) --- */
-  --color-background-light: #F2E8C9;   /* Natural Fiber: Main background base ("Paper" color) */
-  --color-background-dark: #400101;    /* Coffee Soil: Dark mode base background or high-emphasis cards */
-  --color-background-tint: #F1F8E9;    /* Mint Whisper: Success areas or soft highlight surfaces (Light Mode) */
-  --color-background-shade: #02590F;   /* Canopy Dark: Base for modals, sidebars, or night mode surfaces */
+  --color-background-light: #0f0f0f; /* Natural Fiber: Main background base ("Paper" color) */
+  --color-background-dark: #400101; /* Coffee Soil: Dark mode base background or high-emphasis cards */
+  --color-background-tint: #f1f8e9; /* Mint Whisper: Success areas or soft highlight surfaces (Light Mode) */
+  --color-background-shade: #02590f; /* Canopy Dark: Base for modals, sidebars, or night mode surfaces */
 
   /* --- Structural Neutrals (Borders & Dividers) --- */
-  --color-border-light: #E6DCC3;       /* Raw Line: Borders for inputs and cards on light backgrounds */
-  --color-border-dark: #2C1A1A;        /* Night Line: Subtle dividers for dark/coffee backgrounds */
-  --color-disabled: #A89F91;           /* Disabled Gray: Inactive states for buttons or fields */
-  --color-overlay: #022601;            /* Overlay mask for modals (suggested 60% opacity) */
+  --color-border-light: #e6dcc3; /* Raw Line: Borders for inputs and cards on light backgrounds */
+  --color-border-dark: #2c1a1a; /* Night Line: Subtle dividers for dark/coffee backgrounds */
+  --color-disabled: #a89f91; /* Disabled Gray: Inactive states for buttons or fields */
+  --color-overlay: #022601; /* Overlay mask for modals (suggested 60% opacity) */
 
   /* --- Typographic System (Hierarchy) --- */
-  --color-title-dark: #400101;         /* Earth Brown: Main headlines for light backgrounds */
-  --color-title-light: #F2E8C9;        /* Natural Fiber: Main headlines for dark backgrounds */
-  --color-subtitle-dark: #5C4B3F;      /* Humus Brown: Labels and metadata for light backgrounds */
-  --color-subtitle-light: #C9F2AC;     /* Sprout Green: Labels and metadata for dark backgrounds */
-  --color-body-dark: #212121;          /* Soil Dark: Long texts and descriptions for light backgrounds */
-  --color-body-light: #FBF8F1;         /* Cotton White: Long texts and descriptions for dark backgrounds */
-  --color-label-dark: #6D6D6D;         /* Ash Gray: Supporting text and captions for light backgrounds */
-  --color-label-light: #A89F91;        /* Disabled Gray: Supporting text and captions for dark backgrounds */
+  --color-title-dark: #400101; /* Earth Brown: Main headlines for light backgrounds */
+  --color-title-light: #f2e8c9; /* Natural Fiber: Main headlines for dark backgrounds */
+  --color-subtitle-dark: #5c4b3f; /* Humus Brown: Labels and metadata for light backgrounds */
+  --color-subtitle-light: #c9f2ac; /* Sprout Green: Labels and metadata for dark backgrounds */
+  --color-body-dark: #212121; /* Soil Dark: Long texts and descriptions for light backgrounds */
+  --color-body-light: #fbf8f1; /* Cotton White: Long texts and descriptions for dark backgrounds */
+  --color-label-dark: #6d6d6d; /* Ash Gray: Supporting text and captions for light backgrounds */
+  --color-label-light: #a89f91; /* Disabled Gray: Supporting text and captions for dark backgrounds */
 
   /* --- Shadow Colors --- */
-  --color-shadow-float: #400101;       /* Warm Shadow: Standard elevation for cards on light backgrounds */
-  --color-shadow-dense: #022601;       /* Canopy Shadow: Intense depth for modals or overlapping elements */
+  --color-shadow-float: #400101; /* Warm Shadow: Standard elevation for cards on light backgrounds */
+  --color-shadow-dense: #022601; /* Canopy Shadow: Intense depth for modals or overlapping elements */
 
   /* --- Call to Action (Highlights) --- */
-  --color-accent: #F2622E;             /* Harvest Pumpkin: Main CTAs (Buy/Confirm) to evoke appetite and urgency */
-  --color-highlight: #F2A341;          /* Sun Pollen: Badges and notifications to highlight news */
+  --color-accent: #f2622e; /* Harvest Pumpkin: Main CTAs (Buy/Confirm) to evoke appetite and urgency */
+  --color-highlight: #f2a341; /* Sun Pollen: Badges and notifications to highlight news */
 
   /* --- Iconography --- */
   --color-icon-primary-dark: #400101;
-  --color-icon-primary-light: #F2E8C9;
-  --color-icon-secondary-dark: #5C4B3F;
-  --color-icon-invert-dark: #F2E8C9;
+  --color-icon-primary-light: #f2e8c9;
+  --color-icon-secondary-dark: #5c4b3f;
+  --color-icon-invert-dark: #f2e8c9;
   --color-icon-invert-light: #400101;
-  --color-icon-active: #F2622E;
+  --color-icon-active: #f2622e;
 
   /* --- Feedback Colors (Status) --- */
-  --color-success: #2ECC71;            /* Emerald Fresh: Digital success indication */
-  --color-error: #D9042B;              /* Clay Error: Earthy red for critical alerts and errors */
-  --color-warning: #F2C84B;            /* Ripe Warning: Yellowish ochre for preventive warnings */
-  --color-info: #2F80ED;               /* Water Info: Soft blue for neutral system information */
+  --color-success: #2ecc71; /* Emerald Fresh: Digital success indication */
+  --color-error: #d9042b; /* Clay Error: Earthy red for critical alerts and errors */
+  --color-warning: #f2c84b; /* Ripe Warning: Yellowish ochre for preventive warnings */
+  --color-info: #2f80ed; /* Water Info: Soft blue for neutral system information */
 }
 
 @layer base {
   /* --- Global Reset and Base Typography --- */
-  html, body, #root {
+  html,
+  body,
+  #root {
     @apply h-full w-full m-0 p-0;
     /* Inter 400 (Regular) is the gold standard for interface readability */
-    font-weight: 400; 
+    font-weight: 400;
   }
 
   body {
@@ -94,18 +96,23 @@
   }
 
   /* H4-H6: Inter 500 (Medium) used as labels or secondary metadata titles */
-  h4, h5, h6 {
+  h4,
+  h5,
+  h6 {
     color: var(--color-subtitle-dark);
     font-weight: 500;
   }
 
   /* Paragraphs and general UI: 400 (Regular) for optimal scanning and reading */
-  p, span, li {
+  p,
+  span,
+  li {
     font-weight: 400;
   }
 
   /* Labels and Captions: 500 (Medium) ensures legibility at smaller sizes */
-  label, caption {
+  label,
+  caption {
     font-weight: 500;
     color: var(--color-label-dark);
   }
@@ -117,7 +124,8 @@
   }
 
   /* Semantic bolding: 700 (Bold) for emphasis within bodies of text */
-  strong, b {
+  strong,
+  b {
     font-weight: 700;
   }
 
@@ -133,11 +141,15 @@
     background-color: var(--color-background-dark);
   }
 
-  html.dark h1, html.dark h2, html.dark h3 {
+  html.dark h1,
+  html.dark h2,
+  html.dark h3 {
     color: var(--color-title-light);
   }
 
-  html.dark h4, html.dark h5, html.dark h6 {
+  html.dark h4,
+  html.dark h5,
+  html.dark h6 {
     color: var(--color-subtitle-light);
   }
 }

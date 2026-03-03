@@ -2,7 +2,7 @@ import * as THREE from 'three/webgpu';
 import { Canvas, extend, type CanvasProps } from '@react-three/fiber';
 import { OrbitControls, Environment } from '@react-three/drei';
 import { Model as CardModel } from './components/card/model/card.model';
-import nightsky from '@guardians/engine-assets/exr/nightsky.exr';
+// import nightsky from '@guardians/engine-assets/exr/nightsky.exr';
 
 extend(THREE as unknown as Record<string, new (...args: unknown[]) => unknown>);
 
@@ -25,12 +25,10 @@ function SceneCanvas() {
   return (
     <Canvas gl={glConfig} shadows camera={{ position: [0, 0, 15], fov: 25 }}>
       <Environment
-        files={nightsky as string}
-        background={true}
-        preset={undefined}
-        backgroundBlurriness={0} // optional blur factor between 0 and 1 (default: 0, only works with three 0.146 and up)
+        // files={nightsky}
+        preset="studio"
+        background={false}
         backgroundIntensity={0.8} // optional intensity factor (default: 1, only works with three 0.163 and up)
-        backgroundRotation={[0, Math.PI / 2, 0]} // optional rotation (default: 0, only works with three 0.163 and up)
         environmentIntensity={0.5}
       />
 
@@ -39,13 +37,13 @@ function SceneCanvas() {
 
       <OrbitControls
         enableDamping={true}
-        dampingFactor={0.05}
+        dampingFactor={0.5}
         minDistance={5}
         maxDistance={30}
         maxPolarAngle={Math.PI / 1}
       />
 
-      <CardModel scale={50} />
+      <CardModel scale={50.0} />
     </Canvas>
   );
 }
