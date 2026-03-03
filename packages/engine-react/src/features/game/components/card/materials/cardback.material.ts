@@ -15,9 +15,11 @@ export function createCardBackMaterial(artworkTexture: THREE.Texture) {
 
   const cardBackMaterial = new MeshPhysicalNodeMaterial({
     name: 'M_Card_Back',
-    roughness: 0.6,
-    metalness: 0.1,
+    roughness: 1.0,
+    metalness: 0.2,
+    clearcoat: 0.0,
   });
+  cardBackMaterial.emissive = new THREE.Color(0x000000);
 
   // The core of the TSL graph: sample the provided texture.
   cardBackMaterial.colorNode = texture(artworkTexture);

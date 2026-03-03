@@ -1,10 +1,10 @@
-import IphoneCanvas from '../canvas';
+import Game from '../game';
 
 const Ui = () => {
   return (
     <div>
       <div className="absolute inset-0 z-0">
-        <IphoneCanvas />
+        <Game />
       </div>
       <main className="relative z-10 w-full h-full pointer-events-none">
         <div className="container mx-auto p-4 pointer-events-auto">
