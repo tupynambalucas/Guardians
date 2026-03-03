@@ -3,6 +3,7 @@ import { Canvas, extend, type CanvasProps } from '@react-three/fiber';
 import { Environment } from '@react-three/drei';
 import Card from './components/card';
 import GameCamera from './components/camera';
+import { Perf } from 'r3f-perf';
 // import nightsky from '@guardians/engine-assets/exr/nightsky.exr';
 
 extend(THREE as unknown as Record<string, new (...args: unknown[]) => unknown>);
@@ -25,6 +26,7 @@ function Game() {
 
   return (
     <Canvas gl={glConfig} shadows>
+      {/* <Perf position="top-left" /> */}
       <GameCamera />
 
       <Environment
