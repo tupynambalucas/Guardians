@@ -13,6 +13,7 @@
     "core:build": "npm run build -w @guardians/engine-core",
     "build": "npm run core:build && npm run frontend:build",
     "model:generate": "npm run model:generate -w @guardians/engine-assets",
+    "monorepo:clean": "npx rimraf node_modules package-lock.json packages/engine-assets/node_modules packages/engine-core/node_modules packages/engine-react/node_modules",
     "lint": "eslint ."
   },
   "devDependencies": {

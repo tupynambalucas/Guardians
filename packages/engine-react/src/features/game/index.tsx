@@ -26,7 +26,6 @@ function Game() {
 
   return (
     <Canvas gl={glConfig} shadows>
-      {/* <Perf position="top-left" /> */}
       <GameCamera />
 
       <Environment
