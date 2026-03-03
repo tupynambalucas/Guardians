@@ -23,7 +23,7 @@ export default defineConfig(({ mode }) => {
     ],
 
     optimizeDeps: {
-      exclude: ['@iphone17pro-lp/engine-core'],
+      exclude: ['@guardians/engine-core'],
     },
 
     base: './',
