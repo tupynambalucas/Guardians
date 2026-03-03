@@ -10,7 +10,7 @@ export function createCardBackMaterial(artworkTexture: THREE.Texture) {
 
   // Center the texture as requested.
   artworkTexture.center = new THREE.Vector2(0.5, 0.5);
-  artworkTexture.rotation = Math.PI; // Corrects orientation if the model's UV is flipped.
+  // artworkTexture.rotation = Math.PI; // Corrects orientation if the model's UV is flipped.
   artworkTexture.flipY = false; // Ensure flipY is disabled to respect the model's UV mapping.
 
   const cardBackMaterial = new MeshPhysicalNodeMaterial({

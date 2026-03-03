@@ -17,7 +17,7 @@ function Game() {
     renderer.shadowMap.enabled = true;
     renderer.shadowMap.type = THREE.PCFSoftShadowMap;
     renderer.toneMapping = THREE.NeutralToneMapping;
-    renderer.toneMappingExposure = 0.5;
+    renderer.toneMappingExposure = 0.3;
     renderer.setPixelRatio(window.devicePixelRatio);
     await renderer.init();
     return renderer as unknown as THREE.Renderer;
@@ -34,14 +34,9 @@ function Game() {
         backgroundIntensity={0.8} // optional intensity factor (default: 1, only works with three 0.163 and up)
         environmentIntensity={0.3}
       />
-      <hemisphereLight
-        color="#ffffff"
-        groundColor="#aaaaaa"
-        intensity={0.2}
-        position={[0, 100, 30]}
-      />
-      <ambientLight intensity={0.5} />
-      <directionalLight position={[10, 20, 15]} intensity={1.5} castShadow shadow-bias={-0.0001} />
+
+      <ambientLight intensity={0.1} />
+      <directionalLight position={[0, 20, 20]} intensity={1} castShadow shadow-bias={-0.0001} />
 
       {/* <OrbitControls
         enableDamping={true}
