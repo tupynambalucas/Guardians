@@ -8,12 +8,18 @@ import artworkPath from '@guardians/engine-assets/textures/cards/back/jamar.png'
 
 type GLTFResult = GLTF & {
   nodes: {
-    MSH_Card_Back: THREE.Mesh;
+    MSH_CardBack_Inner_Border: THREE.Mesh;
+    MSH_CardBack_Outter_Border: THREE.Mesh;
+    MSH_CardBack_Surface: THREE.Mesh;
+    MSH_CardFront_Inner_Border: THREE.Mesh;
+    MSH_CardFront_Outter_Border: THREE.Mesh;
+    MSH_CardFront_Surface: THREE.Mesh;
     MSH_Card_Body: THREE.Mesh;
-    MSH_Card_Front: THREE.Mesh;
   };
   materials: {
-    M_Paper_Detail: THREE.MeshStandardMaterial;
+    M_Card_Border: THREE.MeshStandardMaterial;
+    M_Card_Back: THREE.MeshStandardMaterial;
+    M_Card_Front: THREE.MeshStandardMaterial;
     M_Paper: THREE.MeshPhysicalMaterial;
   };
 };
@@ -31,26 +37,62 @@ export function Model(props: ThreeElements['group']) {
     <group {...props} dispose={null}>
       <group name="Card">
         <group name="GRP_Guardian_Card">
-          <mesh
-            name="MSH_Card_Back"
-            castShadow
-            receiveShadow
-            geometry={nodes.MSH_Card_Back.geometry}
-            material={cardBackMaterial}
-          />
+          <group name="GRP_CardBack">
+            <group name="GRP_CardBack_Borders">
+              <mesh
+                name="MSH_CardBack_Inner_Border"
+                castShadow
+                receiveShadow
+                geometry={nodes.MSH_CardBack_Inner_Border.geometry}
+                material={materials.M_Card_Border}
+              />
+              <mesh
+                name="MSH_CardBack_Outter_Border"
+                castShadow
+                receiveShadow
+                geometry={nodes.MSH_CardBack_Outter_Border.geometry}
+                material={materials.M_Card_Border}
+              />
+            </group>
+            <mesh
+              name="MSH_CardBack_Surface"
+              castShadow
+              receiveShadow
+              geometry={nodes.MSH_CardBack_Surface.geometry}
+              material={cardBackMaterial}
+            />
+          </group>
+          <group name="GRP_CardFront">
+            <group name="GRP_CardFront_Borders">
+              <mesh
+                name="MSH_CardFront_Inner_Border"
+                castShadow
+                receiveShadow
+                geometry={nodes.MSH_CardFront_Inner_Border.geometry}
+                material={materials.M_Card_Border}
+              />
+              <mesh
+                name="MSH_CardFront_Outter_Border"
+                castShadow
+                receiveShadow
+                geometry={nodes.MSH_CardFront_Outter_Border.geometry}
+                material={materials.M_Card_Border}
+              />
+            </group>
+            <mesh
+              name="MSH_CardFront_Surface"
+              castShadow
+              receiveShadow
+              geometry={nodes.MSH_CardFront_Surface.geometry}
+              material={materials.M_Card_Front}
+            />
+          </group>
           <mesh
             name="MSH_Card_Body"
             castShadow
             receiveShadow
             geometry={nodes.MSH_Card_Body.geometry}
             material={materials.M_Paper}
-          />
-          <mesh
-            name="MSH_Card_Front"
-            castShadow
-            receiveShadow
-            geometry={nodes.MSH_Card_Front.geometry}
-            material={materials.M_Paper_Detail}
           />
         </group>
       </group>

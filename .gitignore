@@ -16,7 +16,6 @@ build/
 # Ignora todos os arquivos de env
 .env
 .env.*
-.tmp*/
 *.tmp
 # --- Sistema Operacional ---
 .DS_Store
