@@ -31,10 +31,10 @@ Type safety is paramount for the stability of our WebGPU pipeline.
 
 **CRITICAL**: The `useFrame` loop runs 60-120 times per second.
 
-- **NO Allocations**: Never create objects (`new THREE.Vector3()`, `new THREE.Matrix4()`) inside `useFrame`. Re-use module-level constants or `useMemo` variables.
-  - _ESLint Rule_: `@react-three/no-clone-in-loop`
-- **NO State Updates**: Never call `setState` or dispatch actions inside `useFrame` unless absolutely necessary (and throttled). Use `useRef` for visual updates.
-  - _ESLint Rule_: `@react-three/no-new-in-loop`
+- **NO Allocations**: Nunca crie objetos ou clones (`new THREE.Vector3()`, `.clone()`) dentro de `useFrame`.
+  - _Regras ESLint_: `@react-three/no-clone-in-loop` e `@react-three/no-new-in-loop`.
+- **NO State Updates**: Nunca chame `setState` ou despache ações dentro de `useFrame`. Isso causa re-renders pesados na CPU. Utilize `useRef` para mutações visuais diretas.
+  - _Regra ESLint_: `no-restricted-syntax` (configurada para detectar `set*` dentro de `useFrame`).
 
 ### 2. Component Structure
 

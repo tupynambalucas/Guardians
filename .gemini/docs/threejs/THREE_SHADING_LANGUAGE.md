@@ -1,4 +1,4 @@
-> O código gerado para TSL deve respeitar o rigor de tipagem do @guardians/engine-core, evitando o uso de any em inputs e outputs de funções de shader.
+> The code generated for TSL must respect the typing rigor of @guardians/engine-core, avoiding the use of `any` in shader function inputs and outputs.
 
 ## TSL Specification
 

@@ -282,6 +282,16 @@ export default defineConfig([
           ],
         },
       ],
+
+      'no-restricted-syntax': [
+        'error',
+        {
+          selector:
+            "CallExpression[callee.name='useFrame'] CallExpression[callee.name=/^set[A-Z]/]",
+          message:
+            'ERRO DE PERFORMANCE: Não utilize setters de estado (setState) dentro do loop useFrame. Isso causa re-renders a cada frame (60fps+). Utilize useRef e mutação direta para atualizações visuais.',
+        },
+      ],
       '@react-three/no-clone-in-loop': 'error',
       '@react-three/no-new-in-loop': 'error',
       '@typescript-eslint/no-empty-function': 'off',

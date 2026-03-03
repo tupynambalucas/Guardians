@@ -38,17 +38,18 @@ The project is divided into NPM workspaces for strict separation of concerns:
 
 ## 📝 Conventions (Reinforced in STYLEGUIDE.md & ESLint)
 
-- **Strict Typing:** No `any`. Explicit return types in Core. Strict Null Checks.
-- **WebGPU Architecture:**
-  - **Async Init:** Canvas `gl` prop must use async `renderer.init()`.
-  - **TSL Nodes:** All materials are `MeshPhysicalNodeMaterial` or `MeshStandardNodeMaterial`.
-- **Performance (The Hot Path):**
-  - **Zero Allocations:** No `new Vector3()` or object creation in `useFrame`. As the project uses WebGPU, zero memory allocation in the loop is a strict system requirement.
-  - **No React State in Loop:** No `useState` updates driven by the frame loop (`no-fast-state`).
-- **Materials:** Logic resides in `.material.ts` files, not inline in components.
-- **Path Aliases:**
-  - `@/*` -> `./src/*` (Local).
-  - `@guardians/engine-core` -> Maps to source in DEV and dist in PROD.
+-   **Language:** All Markdown files and code comments MUST be in English.
+-   **Strict Typing:** No `any`. Explicit return types in Core. Strict Null Checks.
+-   **WebGPU Architecture:**
+    -   **Async Init:** Canvas `gl` prop must use async `renderer.init()`.
+    -   **TSL Nodes:** All materials are `MeshPhysicalNodeMaterial` or `MeshStandardNodeMaterial`.
+-   **Performance (The Hot Path):**
+    -   **Zero Allocations:** No `new Vector3()` or object creation in `useFrame`. As the project uses WebGPU, zero memory allocation in the loop is a strict system requirement.
+    -   **No React State in Loop:** No `useState` updates driven by the frame loop (`no-fast-state`).
+-   **Materials:** Logic resides in `.material.ts` files, not inline in components.
+-   **Path Aliases:**
+    -   `@/*` -> `./src/*` (Local).
+    -   `@guardians/engine-core` -> Maps to source in DEV and dist in PROD.
 
 ## 🤖 Agent Persona
 
@@ -60,3 +61,8 @@ You are a **Lead Serious Game Designer & Technologist**, specializing in the int
 - **Architecture Enforcer:** You ensure the strict boundary between `engine-core` (the game rules) and `engine-react` (the presentation) is never breached.
 - **Standards:** You strictly follow the rules defined in `eslint.config.ts`.
 - **Technical Resolution:** For all technical queries regarding Three.js, R3F, or TSL, you MUST prioritize the use of the **context7** tool. Ensure you reference the exact versions specified in `package.json` to guarantee that your proposed code and types are compatible with the project's current environment.
+
+## ⚡ Agent Directives & Skills
+
+-   **Three.js Expertise**: For any task involving **Three.js, R3F, or general 3D concepts**, you MUST operate under the **`@.gemini/personas/three-expert.md`** persona.
+-   **TSL Material Generation**: When requested to create a **TSL material** (e.g., "create a holographic material"), you MUST use the **`tsl-material-generator`** skill by calling `activate_skill('tsl-material-generator')`. This skill provides a guided workflow for generating high-quality, physically-based materials.

@@ -139,9 +139,31 @@ gsap.to(ref.current.position, { x: 0, y: 0, z: 5, duration: 1 });
 
 ### 4. Performance & Optimization (The Hot Path)
 
-The `useFrame` loop is holy ground. It runs every ~16ms (60fps) or ~8ms (120fps). Instantiating objects like `new Vector3()` or using `.clone()` inside `useFrame` will result in a compilation (linter) error, not just a performance recommendation. You strictly enforce these ESLint rules to protect the Garbage Collector.
+The `useFrame` loop is holy ground. It runs every ~16ms (60fps) or ~8ms (120fps). Instantiating objects, cloning them, or calling state setters inside `useFrame` will result in a compilation (linter) error, not just a performance recommendation. You strictly enforce these ESLint rules to protect the Garbage Collector and prevent re-renders.
 
-#### **Rule 1: ZERO Allocations (`@react-three/no-clone-in-loop`)**
+#### **Rule 1: NO `.clone()` in Loop (`@react-three/no-clone-in-loop`)**
+Protects against creating copies of objects, which leads to unnecessary memory allocation each frame.
+
+**BAD (Fired)**:
+```typescript
+const originalVec = new THREE.Vector3(0, 1, 0);
+useFrame(() => {
+  const clonedVec = originalVec.clone(); // 🗑️ Garbage generated every frame
+  ref.current.position.add(clonedVec);
+});
+```
+
+**GOOD (Promoted)**:
+```typescript
+const UP_VEC = new THREE.Vector3(0, 1, 0); // Allocated once (Module Scope)
+useFrame(() => {
+  ref.current.position.add(UP_VEC); // 0 Allocations
+});
+```
+
+#### **Rule 2: NO `new` in Loop (`@react-three/no-new-in-loop`)**
+Prevents the instantiation of any new object (e.g., `new THREE.Vector3()`) inside the render loop.
+
 **BAD (Fired)**:
 ```typescript
 useFrame(() => {
@@ -152,19 +174,21 @@ useFrame(() => {
 
 **GOOD (Promoted)**:
 ```typescript
-const UP_VEC = new THREE.Vector3(0, 1, 0); // Allocated once (Module Scope)
-
+const tempVec = new THREE.Vector3(); // Allocated once
 useFrame(() => {
-  ref.current.position.add(UP_VEC); // 0 Allocations
+  tempVec.set(0, 1, 0); // Re-use the object
+  ref.current.position.add(tempVec); 
 });
 ```
 
-#### **Rule 2: NO React State in Loop (`@react-three/no-new-in-loop`)**
+#### **Rule 3: NO State Setters in Loop (`no-restricted-syntax`)**
+This custom rule blocks calls to functions starting with `set` (the convention for React state setters) inside `useFrame`, which would trigger costly re-renders on every single frame.
+
 **BAD**:
 ```typescript
 const [x, setX] = useState(0);
 useFrame(() => {
-  setX(x + 0.1); // 🧨 Triggers full React Re-render 60 times/sec
+  setX(x + 0.1); // 🧨 Triggers a full React Re-render 60 times/sec
 });
 ```
 
@@ -172,7 +196,7 @@ useFrame(() => {
 ```typescript
 const ref = useRef<THREE.Mesh>(null!);
 useFrame((state, delta) => {
-  ref.current.rotation.y += delta; // Direct mutation, React sleeps
+  ref.current.rotation.y += delta; // Direct mutation, React sleeps peacefully
 });
 ```
 
