@@ -22,19 +22,16 @@ function Game() {
       }
 
       try {
-        // 1. Pedimos acesso direto à GPU (sem o Three.js no meio) para um diagnóstico cirúrgico
         const adapter = await navigator.gpu.requestAdapter();
-        if (!adapter) throw new Error('Adaptador WebGPU indisponível');
+        if (!adapter) throw new Error('WebGPU adapter unavailable');
 
         const device = await adapter.requestDevice();
 
-        // 2. Criamos um "espião" para capturar o exato momento em que o Vulkan crasha
         let isDeviceLost = false;
         void device.lost.then(() => {
           isDeviceLost = true;
         });
 
-        // 3. Forçamos a criação do buffer de vídeo no DOM (onde o Android falha)
         const canvas = document.createElement('canvas');
         canvas.style.position = 'absolute';
         canvas.style.opacity = '0';
@@ -45,10 +42,9 @@ function Game() {
           context.configure({
             device,
             format: navigator.gpu.getPreferredCanvasFormat(),
-            alphaMode: 'premultiplied', // O canal Alpha que está a causar o erro no seu sistema
+            alphaMode: 'premultiplied',
           });
 
-          // 4. Obrigado a desenhar 1 frame vazio para acionar o hardware imediatamente
           const encoder = device.createCommandEncoder();
           const pass = encoder.beginRenderPass({
             colorAttachments: [
@@ -64,21 +60,19 @@ function Game() {
           device.queue.submit([encoder.finish()]);
         }
 
-        // 5. Aguardamos 150ms. Se o driver do telemóvel for crashar, ele fará isso agora.
         await new Promise((resolve) => setTimeout(resolve, 150));
 
         canvas.remove();
 
-        // Verificamos o nosso espião antes de destruir o dispositivo
         if (isDeviceLost) {
-          throw new Error('WebGPU Device Lost (Falha no Driver Vulkan)');
+          throw new Error('WebGPU Device Lost (Vulkan Driver Failure)');
         }
 
         device.destroy();
-        console.log('✅ WebGPU estável. Hardware buffer suportado!');
+        console.log('✅ Stable WebGPU. Hardware buffer supported!');
         setRendererMode('webgpu');
       } catch (error) {
-        console.warn('⚠️ WebGPU instável no dispositivo. Ativando fallback para WebGL2...', error);
+        console.warn('⚠️ Unstable WebGPU on device. Activating fallback to WebGL2...', error);
         setRendererMode('webgl');
       }
     }
