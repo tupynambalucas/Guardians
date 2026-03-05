@@ -5,6 +5,7 @@ import tsconfigPaths from 'vite-tsconfig-paths';
 import react from '@vitejs/plugin-react-swc';
 import svgr from 'vite-plugin-svgr';
 import tailwindcss from '@tailwindcss/vite';
+import basicSsl from '@vitejs/plugin-basic-ssl';
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
@@ -12,6 +13,7 @@ const __dirname = path.dirname(__filename);
 export default defineConfig(({ mode }) => {
   return {
     plugins: [
+      basicSsl(),
       tsconfigPaths({
         projects: [mode === 'development' ? './tsconfig.app.json' : './tsconfig.build.json'],
       }),

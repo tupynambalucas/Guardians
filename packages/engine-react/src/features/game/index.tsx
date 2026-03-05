@@ -9,18 +9,32 @@ extend(THREE as unknown as Record<string, new (...args: unknown[]) => unknown>);
 
 function Game() {
   const glConfig: CanvasProps['gl'] = async ({ canvas }) => {
-    const renderer = new THREE.WebGPURenderer({
-      canvas: canvas as unknown as HTMLCanvasElement,
-      antialias: true,
-      alpha: true,
-    });
-    renderer.shadowMap.enabled = true;
-    renderer.shadowMap.type = THREE.PCFSoftShadowMap;
-    renderer.toneMapping = THREE.NeutralToneMapping;
-    renderer.toneMappingExposure = 0.5;
-    renderer.setPixelRatio(window.devicePixelRatio);
-    await renderer.init();
-    return renderer as unknown as THREE.Renderer;
+    try {
+      const supportsWebGPU = navigator.gpu !== undefined;
+      console.log('Suporte a WebGPU:', supportsWebGPU);
+
+      const renderer = new THREE.WebGPURenderer({
+        canvas: canvas as unknown as HTMLCanvasElement,
+        antialias: false,
+        alpha: false,
+        forceWebGL: !supportsWebGPU, // Força fallback se não houver WebGPU
+      });
+
+      renderer.shadowMap.enabled = true;
+      renderer.shadowMap.type = THREE.PCFSoftShadowMap;
+      renderer.toneMapping = THREE.NeutralToneMapping;
+      renderer.toneMappingExposure = 0.5;
+      renderer.setPixelRatio(window.devicePixelRatio);
+
+      await renderer.init();
+      console.log('Renderer inicializado com sucesso!');
+
+      return renderer as unknown as THREE.Renderer;
+    } catch (error) {
+      console.error('Erro fatal ao inicializar o WebGPURenderer:', error);
+      // Retorna nulo ou lança erro para evitar que a tela fique preta sem explicação
+      throw error;
+    }
   };
 
   return (
