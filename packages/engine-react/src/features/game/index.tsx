@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import * as THREE from 'three/webgpu';
 import { Canvas, extend, type CanvasProps } from '@react-three/fiber';
 import { Environment } from '@react-three/drei';
@@ -8,30 +8,77 @@ import GameCamera from './components/camera';
 extend(THREE as unknown as Record<string, new (...args: unknown[]) => unknown>);
 
 function Game() {
-  // Estado que controla a inicialização. 'pending' significa que estamos testando o celular.
   const [rendererMode, setRendererMode] = useState<'pending' | 'webgpu' | 'webgl'>('pending');
+  const hasTested = useRef(false);
 
   useEffect(() => {
+    if (hasTested.current) return;
+    hasTested.current = true;
+
     async function testGPU() {
+      if (!navigator.gpu) {
+        setRendererMode('webgl');
+        return;
+      }
+
       try {
-        // 1. Criamos um canvas temporário na memória apenas para testar o driver
-        const testCanvas = document.createElement('canvas');
-        const testRenderer = new THREE.WebGPURenderer({
-          canvas: testCanvas,
-          antialias: true,
-          alpha: true,
+        // 1. Pedimos acesso direto à GPU (sem o Three.js no meio) para um diagnóstico cirúrgico
+        const adapter = await navigator.gpu.requestAdapter();
+        if (!adapter) throw new Error('Adaptador WebGPU indisponível');
+
+        const device = await adapter.requestDevice();
+
+        // 2. Criamos um "espião" para capturar o exato momento em que o Vulkan crasha
+        let isDeviceLost = false;
+        void device.lost.then(() => {
+          isDeviceLost = true;
         });
 
-        // 2. O erro do driver Vulkan do seu celular vai acontecer AQUI, de forma segura
-        await testRenderer.init();
+        // 3. Forçamos a criação do buffer de vídeo no DOM (onde o Android falha)
+        const canvas = document.createElement('canvas');
+        canvas.style.position = 'absolute';
+        canvas.style.opacity = '0';
+        document.body.appendChild(canvas);
 
-        // 3. Se não deu erro, a GPU suporta WebGPU perfeitamente. Limpamos a memória.
-        testRenderer.dispose();
-        console.log('✅ Teste WebGPU passou. Iniciando com WebGPU...');
+        const context = canvas.getContext('webgpu');
+        if (context) {
+          context.configure({
+            device,
+            format: navigator.gpu.getPreferredCanvasFormat(),
+            alphaMode: 'premultiplied', // O canal Alpha que está a causar o erro no seu sistema
+          });
+
+          // 4. Obrigado a desenhar 1 frame vazio para acionar o hardware imediatamente
+          const encoder = device.createCommandEncoder();
+          const pass = encoder.beginRenderPass({
+            colorAttachments: [
+              {
+                view: context.getCurrentTexture().createView(),
+                clearValue: { r: 0, g: 0, b: 0, a: 0 },
+                loadOp: 'clear',
+                storeOp: 'store',
+              },
+            ],
+          });
+          pass.end();
+          device.queue.submit([encoder.finish()]);
+        }
+
+        // 5. Aguardamos 150ms. Se o driver do telemóvel for crashar, ele fará isso agora.
+        await new Promise((resolve) => setTimeout(resolve, 150));
+
+        canvas.remove();
+
+        // Verificamos o nosso espião antes de destruir o dispositivo
+        if (isDeviceLost) {
+          throw new Error('WebGPU Device Lost (Falha no Driver Vulkan)');
+        }
+
+        device.destroy();
+        console.log('✅ WebGPU estável. Hardware buffer suportado!');
         setRendererMode('webgpu');
       } catch (error) {
-        // 4. O driver falhou! Capturamos o erro e decidimos usar o WebGL.
-        console.warn('⚠️ Teste WebGPU falhou. Forçando fallback para WebGL...', error);
+        console.warn('⚠️ WebGPU instável no dispositivo. Ativando fallback para WebGL2...', error);
         setRendererMode('webgl');
       }
     }
@@ -39,32 +86,16 @@ function Game() {
     void testGPU();
   }, []);
 
-  // Enquanto o teste acontece (é muito rápido), não renderizamos o Canvas para evitar crashes
   if (rendererMode === 'pending') {
-    return (
-      <div
-        style={{
-          display: 'flex',
-          justifyContent: 'center',
-          alignItems: 'center',
-          width: '100vw',
-          height: '100vh',
-          color: 'white',
-          backgroundColor: '#111',
-        }}
-      >
-        Carregando Motor Gráfico...
-      </div>
-    );
+    return null;
   }
 
-  // Agora a função glConfig é segura e não vai lançar erros fatais
   const glConfig: CanvasProps['gl'] = async ({ canvas }) => {
     const renderer = new THREE.WebGPURenderer({
       canvas: canvas as unknown as HTMLCanvasElement,
       antialias: true,
       alpha: true,
-      forceWebGL: rendererMode === 'webgl', // Usa o resultado do nosso teste
+      forceWebGL: rendererMode === 'webgl',
     });
 
     renderer.shadowMap.enabled = true;
