@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useRef } from 'react';
+import { useState, useEffect, useRef } from 'react';
 import * as THREE from 'three/webgpu';
 import { Canvas, extend, type CanvasProps } from '@react-three/fiber';
 import { Environment } from '@react-three/drei';
