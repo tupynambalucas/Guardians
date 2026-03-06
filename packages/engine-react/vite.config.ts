@@ -11,11 +11,13 @@ const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
 
 export default defineConfig(({ mode }) => {
+  const isDev = mode === 'development';
+
   return {
     plugins: [
-      mode === 'development' ? basicSsl() : [],
+      isDev ? basicSsl() : [],
       tsconfigPaths({
-        projects: ['./tsconfig.app.json'],
+        projects: [isDev ? './tsconfig.app.json' : './tsconfig.build.json'],
       }),
       tailwindcss(),
       react(),
@@ -39,7 +41,7 @@ export default defineConfig(({ mode }) => {
     assetsInclude: ['**/*.glb', '**/*.gltf', '**/*.exr'],
 
     build: {
-      outDir: path.resolve(__dirname, '../../dist'),
+      outDir: path.resolve('dist'),
       emptyOutDir: true,
       sourcemap: mode === 'development',
       rollupOptions: {
