@@ -13,9 +13,9 @@ const __dirname = path.dirname(__filename);
 export default defineConfig(({ mode }) => {
   return {
     plugins: [
-      basicSsl(),
+      mode === 'development' ? basicSsl() : [],
       tsconfigPaths({
-        projects: [mode === 'development' ? './tsconfig.app.json' : './tsconfig.build.json'],
+        projects: ['./tsconfig.app.json'],
       }),
       tailwindcss(),
       react(),
