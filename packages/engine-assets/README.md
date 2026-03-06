@@ -16,8 +16,8 @@ The central repository for static assets for the Guardians of Humanity platform.
 ## 🚀 Integration
 
 This package is consumed by `engine-react`.
-- **Development**: Files are served directly or imported.
-- **Production**: Assets are copied to the public/dist folder of the frontend.
+- **Development**: Files are resolved directly from the `src` folder via path aliases.
+- **Production**: The package uses standard `package.json` exports. Vite/Rollup resolves the binary files as dependencies, hashes them, and bundles them automatically into the frontend's final `dist/assets` output.
 
 ## ⚠️ Large File Storage
 

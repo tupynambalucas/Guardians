@@ -42,8 +42,9 @@ The project is divided into NPM workspaces for strict separation of concerns:
 -   **I18n (Internationalization):** Hardcoded UI strings are strictly prohibited. All user-facing text in `engine-react` must use the `useTranslation` hook from `react-i18next`, which points to the dictionaries defined in `engine-core/locales`.
 -   **Monorepo Imports:** Always use workspace aliases (e.g., `@guardians/engine-core`) for communication between packages. The ESLint configuration (`eslint-import-resolver-typescript`) is set up to resolve these paths automatically, so relative paths like `../../engine-core/src` are not allowed.
 -   **Strict Typing:** No `any`. Explicit return types in Core. Strict Null Checks.
--   **WebGPU Architecture:**
-    -   **Async Init:** Canvas `gl` prop must use async `renderer.init()`.
+-   **WebGPU Architecture & Fallback:**
+    -   **Diagnostic Init:** The application MUST perform a "dry-run" diagnostic of the `navigator.gpu` before mounting the R3F `<Canvas>`. Mobile drivers (like Adreno/Vulkan) often report WebGPU support but crash upon hardware buffer allocation.
+    -   **Silent Fallback:** If the WebGPU device is lost during the 150ms diagnostic window, the app must silently update the state to force WebGL2 (`forceWebGL: true`) via `WebGPURenderer`, ensuring custom TSL materials are transpiled automatically.
     -   **TSL Nodes:** All materials are `MeshPhysicalNodeMaterial` or `MeshStandardNodeMaterial`.
 -   **Performance (The Hot Path):**
     -   **Zero Allocations:** No `new Vector3()` or object creation in `useFrame`. As the project uses WebGPU, zero memory allocation in the loop is a strict system requirement.

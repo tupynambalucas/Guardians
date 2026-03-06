@@ -29,10 +29,10 @@ Run these commands from the **project root**:
 
 ### Development
 ```bash
-# Start the Frontend (Vite)
-npm run dev:frontend
+# Start the Frontend (Vite) with HMR
+npm run frontend:dev
+Note: This starts the development server for engine-react, which internally uses tsconfig-paths to alias @guardians/engine-core to local source files for hot-reloading.
 ```
-*Note: This starts the development server for `engine-react`, which internally aliases `engine-core` source files for hot-reloading.*
 
 ### Quality Control
 ```bash
@@ -43,10 +43,13 @@ npm run lint
 npm run type-check
 ```
 
-### Production Build
+### Production Build & Preview
 ```bash
-# Build all packages in order
+# Build all packages in order (Core -> React)
 npm run build
+
+# Preview the production build locally
+npm run frontend:preview
 ```
 
 ## 📖 Documentation Reference

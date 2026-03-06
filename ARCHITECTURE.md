@@ -72,6 +72,9 @@ To ensure maximum performance and fidelity, the project strictly separates geome
 
 - **Workspace Manager:** NPM Workspaces.
 - **Linting:** ESLint v9 Flat Config (Strict).
-- **Bundling:**
-  - `engine-core`: `tsc` (Outputs ESM).
-  - `engine-react`: `vite` (WebGPU optimized build).
+- **Bundling & Resolution Strategy:**
+  - `engine-core`: `tsc` (Outputs to `packages/engine-core/dist`). Exposes files via `exports` in `package.json`.
+  - `engine-assets`: Exposes raw assets (`.glb`, `.png`) via recursive `exports: { "./*": "./src/*" }`. Excluded from Vite's `optimizeDeps`.
+  - `engine-react`: `vite` (WebGPU optimized build). 
+    - **Development:** Vite resolves `@guardians/` packages to their `src` folders via `tsconfig.app.json` for instant HMR.
+    - **Production:** Vite resolves packages from `node_modules` (symlinked by workspaces), utilizing the compiled `dist` files for a true production representation. Outputs to `packages/engine-react/dist`.
