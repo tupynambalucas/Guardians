@@ -27,7 +27,7 @@ export default defineConfig(({ mode }) => {
     ],
 
     optimizeDeps: {
-      exclude: ['@guardians/engine-core'],
+      exclude: ['@guardians/engine-core', '@guardians/engine-assets'],
     },
 
     base: './',

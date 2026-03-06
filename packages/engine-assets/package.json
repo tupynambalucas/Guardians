@@ -10,6 +10,9 @@
     "url": "git+https://github.com/tupynambalucas/Guardians.git",
     "directory": "packages/engine-assets"
   },
+  "exports": {
+    "./*": "./src/*"
+  },
   "scripts": {
     "model:generate": "npx gltfjsx src/models/gltf/iphone17.glb --types --keepmeshes --keepmaterials --keepnames --keepgroups --output ../engine-react/src/features/canvas/components/Iphone/model/iphone.base.model.tsx"
   }
