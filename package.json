@@ -8,7 +8,7 @@
   ],
   "scripts": {
     "frontend:dev": "npm run dev -w @guardians/engine-react",
-    "frontend:start": "npm run start -w @guardians/engine-react",
+    "frontend:preview": "npm run preview -w @guardians/engine-react",
     "frontend:build": "npm run build -w @guardians/engine-react",
     "core:build": "npm run build -w @guardians/engine-core",
     "build": "npm run core:build && npm run frontend:build",

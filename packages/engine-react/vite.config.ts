@@ -38,6 +38,12 @@ export default defineConfig(({ mode }) => {
       open: true,
     },
 
+    preview: {
+      host: true,
+      port: 5173,
+      open: true,
+    },
+
     assetsInclude: ['**/*.glb', '**/*.gltf', '**/*.exr'],
 
     build: {

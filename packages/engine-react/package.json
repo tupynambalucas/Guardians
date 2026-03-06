@@ -16,7 +16,6 @@
     "build": "tsc -p tsconfig.build.json --noEmit && vite build",
     "lint": "eslint .",
     "preview": "vite preview",
-    "start": "vite preview",
     "typecheck": "tsc --noEmit"
   },
   "dependencies": {
