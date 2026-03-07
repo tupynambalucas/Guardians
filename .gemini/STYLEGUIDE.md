@@ -82,21 +82,62 @@ We do not use GLSL strings. We use TSL Nodes.
 -   **Immutability**: State updates should be immutable (handled by XState context).
 -   **Testing**: Logic must be testable without a browser environment.
 
-## 🧹 Code Quality
+## 🧹 Code Quality & Linting Compliance
 
--   **No Console Logs**: `console.log` is banned in production.
--   **Floating Promises**: All promises must be handled (`await` or `.catch`).
--   **Naming Conventions**:
-    -   Binary asset files (`.glb`, `.png`): `PascalCase`.
-    -   Logic and configuration files: `kebab-case.ts`.
-    -   React component files: `PascalCase.tsx`.
-    -   Hooks: `useCamelCase.ts`.
-    -   Constants: `UPPER_SNAKE_CASE`.
+### 1. Console Usage Policy
+- **Strict Restriction:** `console.log` is strictly prohibited in code intended for production.
+- **Allowed Methods:** Only `console.warn`, `console.error`, and `console.info` are permitted for reporting system diagnostics, environment status, or critical failures.
+- **Linting Enforcement:** The Gemini CLI must never generate `console.log` statements. This is enforced by the `no-console` rule in `eslint.config.ts`, which only ignores the three methods mentioned above.
 
-## 🔍 ESLint Highlights
+### 2. Handling `@typescript-eslint/no-unnecessary-condition`
+This rule is vital for catching bugs but can be overly strict when dealing with dynamic, non-local, or asynchronous state. Here are the official patterns to handle these cases safely:
 
-Refer to `eslint.config.ts` for the definitive list.
+#### A. For Feature Detection (e.g., `navigator.gpu`)
+When global type definitions (like `@webgpu/types`) declare a property as always present, a direct check will fail. Use the `in` operator to perform a runtime-safe check that satisfies the linter.
 
-- `@typescript-eslint/await-thenable`: Security against unhandled async operations.
-- `react-hooks/exhaustive-deps`: Mandatory.
-- `react/no-unknown-property`: Configured to allow R3F props (`rotation-x`, `attach`, etc.).
+- **✅ Correct Pattern:**
+  ```typescript
+  // The 'in' operator checks for property existence at runtime.
+  if ('gpu' in navigator) {
+    // Safe to use navigator.gpu
+  }
+  ```
+
+- **❌ Incorrect Pattern:**
+  ```typescript
+  // Linter may error here if types say 'gpu' always exists.
+  if (navigator.gpu) { ... }
+  ```
+
+#### B. For Asynchronously-Modified Flags
+A local boolean variable modified inside a `.then()` or other asynchronous callback will be seen as "always false" by the linter. Wrap the boolean in an object to prevent the linter from tracking its value across asynchronous boundaries.
+
+- **✅ Correct Pattern:**
+  ```typescript
+  // The object wrapper hides the value from static analysis.
+  const gpuStatus = { isLost: false };
+
+  void device.lost.then(() => {
+    gpuStatus.isLost = true;
+  });
+
+  // Later...
+  if (gpuStatus.isLost) { // This check is now safe.
+    throw new Error('Device lost');
+  }
+  ```
+
+- **❌ Incorrect Pattern:**
+  ```typescript
+  let isDeviceLost = false; // Primitive boolean
+  void device.lost.then(() => {
+    isDeviceLost = true;
+  });
+
+  // Linter will flag this as an unnecessary condition.
+  if (isDeviceLost) { ... }
+  ```
+
+### 3. General Promise & Type Safety
+- **Floating Promises:** Every promise must be explicitly handled with `await`, `.catch()`, or marked with the `void` operator to satisfy ` @typescript-eslint/no-floating-promises`.
+- **Strict Adherence:** All rules defined in `eslint.config.ts` are treated as hard constraints. The Gemini CLI must not propose code that triggers warnings or errors for unnecessary conditions, unused variables, or type mismatches.

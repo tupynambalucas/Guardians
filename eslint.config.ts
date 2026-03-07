@@ -98,7 +98,10 @@ export default defineConfig([
         },
       ],
       '@typescript-eslint/naming-convention': 'off',
-      'no-console': ['warn', { allow: ['warn', 'error'] }],
+      'no-console': [
+        process.env.NODE_ENV === 'production' ? 'error' : 'warn',
+        { allow: ['warn', 'error', 'info'] },
+      ],
       'no-debugger': 'error',
       'prefer-const': 'error',
       'no-var': 'error',
@@ -298,8 +301,6 @@ export default defineConfig([
       '@typescript-eslint/ban-ts-comment': 'error',
       '@typescript-eslint/no-explicit-any': 'error',
       '@typescript-eslint/consistent-indexed-object-style': 'off',
-
-      'no-console': process.env.NODE_ENV === 'production' ? 'error' : 'warn',
     },
   },
 
