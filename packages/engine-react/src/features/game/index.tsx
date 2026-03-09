@@ -16,9 +16,6 @@ function Game() {
     hasTested.current = true;
 
     async function testGPU() {
-      // 1. Usamos o operador 'in' para verificar a existência da propriedade.
-      // Isso evita o erro de "unnecessary condition" que ocorre em ambientes onde o
-      // TypeScript acredita que o navigator.gpu sempre existe (via tipos globais).
       if (!('gpu' in navigator)) {
         setRendererMode('webgl');
         return;
@@ -30,9 +27,6 @@ function Game() {
 
         const device = await adapter.requestDevice();
 
-        // 2. Usamos um objeto de referência (gpuStatus) em vez de uma variável primitiva.
-        // O ESLint não consegue rastrear propriedades de objetos em callbacks assíncronos
-        // da mesma forma que variáveis locais, o que remove o aviso de "always falsy".
         const gpuStatus = { isLost: false };
         void device.lost.then(() => {
           gpuStatus.isLost = true;
@@ -70,7 +64,6 @@ function Game() {
 
         canvas.remove();
 
-        // Checagem segura do estado assíncrono da GPU
         if (gpuStatus.isLost) {
           throw new Error('WebGPU Device Lost (Vulkan Driver Failure)');
         }
